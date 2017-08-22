@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+#VS related
+*.suo
+
+# folders to be ignored
+debug/
+release/
+lib/
+bin/
+.vs/
