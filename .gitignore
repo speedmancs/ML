@@ -39,4 +39,5 @@ debug/
 release/
 lib/
 bin/
+thirdparty/
 .vs/
