@@ -33,6 +33,7 @@
 
 #VS related
 *.suo
+*.sdf
 
 # folders to be ignored
 debug/
