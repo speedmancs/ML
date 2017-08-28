@@ -34,6 +34,7 @@
 #VS related
 *.suo
 *.sdf
+*.user
 
 # folders to be ignored
 debug/
