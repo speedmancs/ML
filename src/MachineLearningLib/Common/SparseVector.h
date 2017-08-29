@@ -2,7 +2,7 @@
 namespace FengML
 {
     template<class T>
-    class SparseVector : public OneHotVector<T>
+    class SparseVector
     {
     public:
         SparseVector();

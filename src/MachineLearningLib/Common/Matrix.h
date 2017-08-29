@@ -1,23 +1,44 @@
 #pragma once
 #include <vector>
+#include "boost/random/uniform_01.hpp"
+#include <cmath>
+#include <cassert>
 namespace FengML
 {
+    template<class T>
+    class Vector;
+
     template<class T>
     class Matrix
     {
     public:
+        template<class U>
+        friend class Vector;
+
         Matrix();
         Matrix(size_t _row, size_t _col);
         Matrix(const std::vector<std::vector<T>>& _data);
         Matrix(const Matrix<T>& other);
         Matrix(Matrix<T>&& other);
         ~Matrix();
+        void FanInFanOutRandomize();
         Matrix& operator = (const Matrix<T>& other);
         Matrix& operator = (Matrix<T>&& other);
-
+        
         std::pair<size_t, size_t> Size() const
         {
             return std::make_pair(row, col);
+        }
+
+        void Resize(size_t _row, size_t _col)
+        {
+            if (row != _row || col != _col)
+            {
+                row = _row;
+                col = _col;
+                delete[] m_data;
+                m_data = new T[row * col];
+            }
         }
 
         size_t Row() const
@@ -42,11 +63,8 @@ namespace FengML
             return m_data[_row * col + _col];
         }
 
-        template<class U>
-        friend class Vector;
-
-        template<class U>
-        friend class OneHotVector;
+        Matrix<T>& Add(T scale, const Matrix<T>& other);
+        Matrix<T>& AssignMul(const Vector<T>& a, const Vector<T>& b);
 
     private:
         T *m_data;
@@ -124,6 +142,7 @@ namespace FengML
         }
 
         std::copy(other.m_data, other.m_data + row * col, m_data);
+        return *this;
     }
 
     template<class T>
@@ -132,5 +151,48 @@ namespace FengML
         std::swap(row, other.row);
         std::swap(col, other.col);
         std::swap(m_data, other.m_data);
+        return *this;
+    }
+    
+    template<class T>
+    void Matrix<T>::FanInFanOutRandomize()
+    {
+        mt19937 generator(time(0));
+        boost::uniform_01<mt19937> dist(generator);
+
+        T r = static_cast<T>(4 * sqrt(6.0 / (row + col)));
+        int len = row * col;
+        for (int i = 0; i < len; i++)
+        {
+            m_data[i] = static_cast<T>((dist() * 2 - 1) * r);
+        }
+    }
+
+    template<class T>
+    Matrix<T>& Matrix<T>::Add(T scale, const Matrix<T>& other)
+    {
+        auto len = this->col * this->row;
+        for (size_t i = 0; i < len; i++)
+        {
+            m_data[i] += scale * other.m_data[i];
+        }
+
+        return *this;
+    }
+
+    // return a * b'
+    template<class T>
+    Matrix<T>& Matrix<T>::AssignMul(const Vector<T>& a, const Vector<T>& b)
+    {
+        Resize(a.Size(), b.Size());
+        for (size_t i = 0; i < a.Size(); i++)
+        {
+            for (size_t j = 0; j < b.Size(); j++)
+            {
+                (*this)(i, j) = a[i] * b[j];
+            }
+        }
+
+        return *this;
     }
 }
