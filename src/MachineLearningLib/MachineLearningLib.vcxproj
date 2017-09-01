@@ -139,10 +139,15 @@
     <ClInclude Include="Common\CommonDef.h" />
     <ClInclude Include="Common\MathUtil.h" />
     <ClInclude Include="Common\Matrix.h" />
+    <ClInclude Include="Common\MatrixOpComponent.h" />
+    <ClInclude Include="Common\MatVecOp.h" />
     <ClInclude Include="Common\OneHotVector.h" />
+    <ClInclude Include="Common\ScalarVecOp.h" />
     <ClInclude Include="Common\SparseMatrix.h" />
     <ClInclude Include="Common\SparseVector.h" />
     <ClInclude Include="Common\Vector.h" />
+    <ClInclude Include="Common\VectorOpComponent.h" />
+    <ClInclude Include="Common\VectorOpComposite.h" />
     <ClInclude Include="Config\Configuration.h" />
     <ClInclude Include="Config\NeuralNetworkConfiguration.h" />
     <ClInclude Include="Data\DataSet.h" />
@@ -150,7 +155,6 @@
     <ClInclude Include="Model\Model.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Common\OneHotVector.cpp" />
     <ClCompile Include="Config\Configuration.cpp" />
     <ClCompile Include="Data\DataSet.cpp" />
     <ClCompile Include="Model\LRModel.cpp" />

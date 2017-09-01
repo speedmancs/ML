@@ -2,6 +2,7 @@
 #include <vector>
 #include "Matrix.h"
 #include "OneHotVector.h"
+#include "VectorOpComponent.h"
 #include <cassert>
 namespace FengML
 {
@@ -9,7 +10,7 @@ namespace FengML
     class Matrix;
 
     template<class T>
-    class Vector
+    class Vector : public VectorOpComponent<T>
     {
     public:
         Vector();
@@ -24,12 +25,24 @@ namespace FengML
         void Resize(size_t len);
         Vector<T>& Add(T scale, const Vector<T>& other);
         Vector<T>& AssignMul(const Matrix<T>& W, const Vector<T>& v);
-        Vector<T>& Add(const Vector<T>& other);
-        Vector<T>& Sub(const OneHotVector& other);
+        Vector<T>& operator += (const Vector<T>& other);
+        Vector<T>& operator -= (const Vector<T>& other);
+        Vector<T>& operator += (const OneHotVector<T>& other);
+        Vector<T>& operator -= (const OneHotVector<T>& other);
+        Vector<T>& operator = (const OneHotVector<T>& other);
+        Vector<T>& operator *= (T val);
         Vector<T>& SoftMax();
         Vector<T>& Sigmod();
         Vector<T>& Tanh();
         Vector<T>& Relu();
+
+        void Eval(Vector<T>& output) override;
+        void EvalAddTo(Vector<T>& output) override;
+        size_t Dim() override
+        {
+            return this->m_Len;
+        }
+
         std::pair<T, size_t> Max() const;
         T * Data()
         {
@@ -57,6 +70,18 @@ namespace FengML
         T *m_data;
         size_t m_Len;
     };
+
+    template<class T>
+    void Vector<T>::Eval(Vector<T>& output)
+    {
+        output = *this;
+    }
+
+    template<class T>
+    void Vector<T>::EvalCombine(Vector<T>& output)
+    {
+        output += *this;
+    }
 
     template<class T>
     Vector<T>::Vector() : m_data(nullptr), m_Len(0)
@@ -122,6 +147,21 @@ namespace FengML
     }
 
     template<class T>
+    Vector<T>& Vector<T>::operator -= (const OneHotVector<T>& other)
+    {
+        if (m_Len != other.m_Len)
+        {
+            delete[]m_data;
+            m_data = new T[other.m_Len];
+            m_Len = other.m_Len;
+        }
+
+        memset(m_data, 0, sizeof(T) * m_Len);
+        m_data[other.m_index] = 1;
+        return *this;
+    }
+
+    template<class T>
     Vector<T>& Vector<T>::operator = (Vector<T>&& other)
     {        
         std::swap(m_Len, other.m_Len);
@@ -168,7 +208,7 @@ namespace FengML
     }
 
     template<class T>
-    Vector<T>& Vector<T>::Add(const Vector<T>& other)
+    Vector<T>& Vector<T>::operator += (const Vector<T>& other)
     {
         for (size_t i = 0; i < m_Len; i++)
         {
@@ -177,7 +217,43 @@ namespace FengML
 
         return *this;
     }
-    
+
+    template<class T>
+    Vector<T>& Vector<T>::operator -= (const Vector<T>& other)
+    {
+        for (size_t i = 0; i < m_Len; i++)
+        {
+            m_data[i] -= other[i];
+        }
+
+        return *this;
+    }
+
+    template<class T>
+    Vector<T>& Vector<T>::operator *= (T val)
+    {
+        for (size_t i = 0; i < m_Len; i++)
+        {
+            m_data[i] *= val;
+        }
+
+        return *this;
+    }
+
+    template<class T>
+    Vector<T>& Vector<T>::operator += (const OneHotVector<T>& other)
+    {
+        this->m_data[other.m_index] ++;
+        return *this;
+    }
+
+    template<class T>
+    Vector<T>& Vector<T>::operator -= (const OneHotVector<T>& other)
+    {
+        this->m_data[other.m_index] --;
+        return *this;
+    }
+
     template<class T>
     Vector<T>& Vector<T>::SoftMax()
     {
@@ -248,12 +324,4 @@ namespace FengML
 
         return res;
     }
-
-    template<class T>
-    Vector<T>& Vector<T>::Sub(const OneHotVector& other)
-    {
-        m_data[other.m_index] --;
-        return *this;
-    }
-
 }
