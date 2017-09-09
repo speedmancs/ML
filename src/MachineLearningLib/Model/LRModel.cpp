@@ -30,14 +30,21 @@ namespace FengML
         return correct / (float)total;
     }
 
-    void LRModel::Fit(const Vector<float>& x, const OneHotVector& y)
+    void LRModel::Update()
+    {
+        db.Div((float)m_config.batchSize);
+        dW.Div((float)m_config.batchSize);
+        b.Sub(m_config.learning_rate, db);
+        W.Sub(m_config.learning_rate, dW);
+    }
+
+    void LRModel::ComputeGradient(const Vector<float>& x, const OneHotVector& y)
     {
         // Calculate db, dW
         size_t pred = Eval(x);
-        (db = y_hat).Sub(y);
-        dW.AssignMul(db, x);
-        b.Sub(m_config.learning_rate, db);
-        W.Sub(m_config.learning_rate, dW);
+        (y_diff = y_hat).Sub(y);
+        db.Add(y_diff);
+        dW.AddMul(y_diff, x);
     }
 
     // Use SGD
@@ -54,7 +61,20 @@ namespace FengML
                 {
                     std::cout <<"\r" << j << " samples scanned";
                 }
-                Fit(trainingSet.GetData(j), trainingSet.GetTarget(j));
+
+                if (j % m_config.batchSize == 0)
+                {
+                    db = 0;
+                    dW = 0;
+                }
+
+                ComputeGradient(trainingSet.GetData(j), trainingSet.GetTarget(j));
+
+                if (j % m_config.batchSize == m_config.batchSize - 1 ||
+                    j == trainingSet.Size() - 1)
+                {
+                    Update();
+                }
             }
             float accuracy = Test(trainingSet, loss);
             std::cout << std::endl << "In training set, accuracy : " << accuracy << " loss: " << loss << std::endl;
@@ -66,9 +86,8 @@ namespace FengML
     size_t LRModel::Eval(const Vector<float>& x)
     {
         // y_hat = softmax(Wx + b);
-        y_hat.AssignMul(W, x).Add(b).SoftMax();     
+        y_hat.AssignMul(W, x).Add(b).SoftMax(); 
         return y_hat.Max().second;
-        return 0;
     }
 
     bool LRModel::Load(const std::string& filePath)

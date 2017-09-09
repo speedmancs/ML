@@ -26,12 +26,30 @@ namespace FengML
         void FanInFanOutRandomize();
         Matrix& operator = (const Matrix<T>& other);
         Matrix& operator = (Matrix<T>&& other);
-        
+        Matrix<T>& AddMul(const Vector<T>& a, const Vector<T>& b);
+
         std::pair<size_t, size_t> Size() const
         {
             return std::make_pair(row, col);
         }
 
+        Matrix<T>& Div(T value)
+        {
+            for (int i = 0; i < row * col; i++)
+            {
+                m_data[i] /= value;
+            }
+            return *this;
+        }
+        
+        Matrix<T>& operator = (T value)
+        {
+            for (int i = 0; i < row * col; i++)
+            {
+                m_data[i] = value;
+            }
+            return *this;
+        }
         void Resize(size_t _row, size_t _col)
         {
             if (row != _row || col != _col)
@@ -199,6 +217,22 @@ namespace FengML
             for (size_t j = 0; j < b.Size(); j++)
             {
                 (*this)(i, j) = a[i] * b[j];
+            }
+        }
+
+        return *this;
+    }
+
+    // return a * b'
+    template<class T>
+    Matrix<T>& Matrix<T>::AddMul(const Vector<T>& a, const Vector<T>& b)
+    {
+        Resize(a.Size(), b.Size());
+        for (size_t i = 0; i < a.Size(); i++)
+        {
+            for (size_t j = 0; j < b.Size(); j++)
+            {
+                (*this)(i, j) += a[i] * b[j];
             }
         }
 

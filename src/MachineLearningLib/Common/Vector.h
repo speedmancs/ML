@@ -59,6 +59,12 @@ namespace FengML
         Vector(const Vector<T>& other);
         Vector(Vector<T>&& other);
         virtual ~Vector();
+        Vector<T>& operator = (T value)
+        {
+            for (int i = 0; i < m_Len; i++)
+                m_data[i] = value;
+            return *this;
+        }
         Vector<T>& operator = (const Vector<T>& other);
         Vector<T>& operator = (Vector<T>&& other);
 

@@ -58,7 +58,7 @@ namespace FengML
         }
 
         cout << endl;
-        delete[]buffer;
+        delete []buffer;
         return true;
     }
 

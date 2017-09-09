@@ -10,7 +10,8 @@ namespace FengML
         LRModel() = default;
         LRModel(const Configuration& config);
         void Fit(const DataSet& trainingSet, const DataSet& validateSet) override;
-        void Fit(const Vector<float>& x, const OneHotVector& y);
+        void ComputeGradient(const Vector<float>& x, const OneHotVector& y);
+        void Update();
         float Test(const DataSet& dataSet, float& loss) override;
         size_t Eval(const Vector<float>& data) override;
         bool Load(const std::string& filePath) override;
@@ -22,5 +23,6 @@ namespace FengML
         Matrix<float> dW;
         Vector<float> db;
         Vector<float> y_hat;
+        Vector<float> y_diff;
     };
 }

@@ -13,5 +13,6 @@ namespace FengML
         float learning_rate;
         int category_number;
         int feature_number;
+        int batchSize;
     };
 }

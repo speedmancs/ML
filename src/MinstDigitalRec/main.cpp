@@ -17,9 +17,10 @@ int main(int argc, char** argv)
     testSet.Load(testFile, testLabelFile);
 
     Configuration config;
+    config.batchSize = 128;
     config.category_number = 10;
     config.feature_number = 28 * 28;
-    config.learning_rate = 0.01f;
+    config.learning_rate = 0.1f;
     config.train_epoch = 200;
     LRModel model(config);
     model.Fit(trainSet, testSet);
