@@ -2,15 +2,9 @@
 #include "..\Common\OneHotVector.h"
 namespace FengML
 {
-    DataSet::DataSet(const std::string& filePath, int categoryNumber):
+    DataSet::DataSet(int categoryNumber):
         m_categoryNumber(categoryNumber)
     {
-        Load(filePath);
-    }
-
-    bool DataSet::Load(const std::string& filePath)
-    {
-        return true;
     }
 
     const Vector<float>& DataSet::GetData(size_t index) const

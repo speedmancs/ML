@@ -33,12 +33,6 @@
     <ClInclude Include="Common\OneHotVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common\SparseVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\SparseMatrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Data\DataSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,25 +42,13 @@
     <ClInclude Include="Config\Configuration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common\MathUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Config\NeuralNetworkConfiguration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common\VectorOpComponent.h">
+    <ClInclude Include="Data\MnistDataSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common\MatrixOpComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\VectorOpComposite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\ScalarVecOp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\MatVecOp.h">
+    <ClInclude Include="Common\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -78,6 +60,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Data\DataSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\MnistDataSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

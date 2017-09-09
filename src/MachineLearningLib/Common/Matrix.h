@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include "boost/random/uniform_01.hpp"
+#include "boost/random/mersenne_twister.hpp"
+#include <ctime>
 #include <cmath>
 #include <cassert>
 namespace FengML
@@ -20,7 +22,7 @@ namespace FengML
         Matrix(const std::vector<std::vector<T>>& _data);
         Matrix(const Matrix<T>& other);
         Matrix(Matrix<T>&& other);
-        ~Matrix();
+        virtual ~Matrix();
         void FanInFanOutRandomize();
         Matrix& operator = (const Matrix<T>& other);
         Matrix& operator = (Matrix<T>&& other);
@@ -38,6 +40,7 @@ namespace FengML
                 col = _col;
                 delete[] m_data;
                 m_data = new T[row * col];
+                memset(m_data, 0, sizeof(T) * row * col);
             }
         }
 
@@ -64,6 +67,10 @@ namespace FengML
         }
 
         Matrix<T>& Add(T scale, const Matrix<T>& other);
+        Matrix<T>& Sub(T scale, const Matrix<T>& other)
+        {
+            return Add(-scale, other);
+        }
         Matrix<T>& AssignMul(const Vector<T>& a, const Vector<T>& b);
 
     private:
@@ -90,6 +97,7 @@ namespace FengML
     Matrix<T>::Matrix(size_t _row, size_t _col) : row(_row), col(_col)
     {
         m_data = new T[_row * _col];
+        memset(m_data, 0, sizeof(T) * row * col);
     }
 
     template<class T>
@@ -157,12 +165,13 @@ namespace FengML
     template<class T>
     void Matrix<T>::FanInFanOutRandomize()
     {
-        mt19937 generator(time(0));
-        boost::uniform_01<mt19937> dist(generator);
+//        boost::random::mt19937 generator((uint32_t)time(0));
+        boost::random::mt19937 generator(123456789);
+        boost::uniform_01<boost::random::mt19937> dist(generator);
 
         T r = static_cast<T>(4 * sqrt(6.0 / (row + col)));
-        int len = row * col;
-        for (int i = 0; i < len; i++)
+        size_t len = row * col;
+        for (size_t i = 0; i < len; i++)
         {
             m_data[i] = static_cast<T>((dist() * 2 - 1) * r);
         }
