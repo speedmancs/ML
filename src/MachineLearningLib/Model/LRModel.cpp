@@ -4,9 +4,10 @@ namespace FengML
 {
     LRModel::LRModel(const Configuration& config): Model(config)
     {
+        boost::random::mt19937 generator(123456789);
         b = Vector<float>(m_config.category_number); // initilized to all 0
         W = Matrix<float>(m_config.category_number, config.feature_number);
-        W.FanInFanOutRandomize();
+        W.FanInFanOutRandomize(generator);
         db = Vector<float>(b.Size());
         dW = Matrix<float>(W.Row(), W.Col());
     }
@@ -32,8 +33,6 @@ namespace FengML
 
     void LRModel::ComputeGradient(const Vector<float>& x, const OneHotVector& y)
     {
-        // Calculate db, dW
-        size_t pred = Eval(x);
         (y_diff = y_hat).Sub(y);
         db.Add(y_diff);
         dW.AddMul(y_diff, x);

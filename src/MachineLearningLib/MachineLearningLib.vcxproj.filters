@@ -33,22 +33,25 @@
     <ClInclude Include="Common\OneHotVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Data\DataSet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Common\CommonDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config\Configuration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Data\MnistDataSet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config\VanillaNNConfiguration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\VanillaNNModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\DataSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\MnistDataSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,12 +62,6 @@
     <ClCompile Include="Config\Configuration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Data\DataSet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Data\MnistDataSet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Common\Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,6 +69,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Model\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\VanillaNNModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\DataSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\MnistDataSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

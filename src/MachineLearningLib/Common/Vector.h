@@ -104,7 +104,24 @@ namespace FengML
             return *this;
         }
 
+        Vector<T>& Mul(const Vector<T>& other)
+        {
+            for (int i = 0; i < m_Len; i++)
+                m_data[i] = m_data[i] * other.m_data[i];
+            return *this;
+        }
+
+        Vector<T>& MulScalarVecSub(T value, const Vector<T>& other)
+        {
+            for (int i = 0; i < m_Len; i++)
+                m_data[i] = m_data[i] * (value - other.m_data[i]);
+            return *this;
+        }
+
+        // W * v
         Vector<T>& AssignMul(const Matrix<T>& W, const Vector<T>& v);
+        // W' * v
+        Vector<T>& AssignMulTMat(const Matrix<T>& W, const Vector<T>& v);
         Vector<T>& operator += (const Vector<T>& other);
         Vector<T>& operator -= (const Vector<T>& other);
         Vector<T>& operator += (const OneHotVector& other);
@@ -273,6 +290,39 @@ namespace FengML
         }
         return *this;
     }
+    template<class T>
+    Vector<T>& Vector<T>::AssignMulTMat(const Matrix<T>& W, const Vector<T>& v)
+    {
+        Resize(W.col);
+        *this = 0;
+        for (size_t i = 0; i < m_Len; i++)
+        {
+            for (int j = 0; j < W.row; j++)
+            {
+                m_data[i] += W(j, i) * v[j];
+            }
+        }
+        return *this;
+    }
+
+    //template<class T>
+    //Vector<T>& Vector<T>::AssignMulTMat(const Matrix<T>& W, const Vector<T>& v)
+    //{
+    //    Resize(W.col);
+    //    *this = 0;
+    //    T* wdata = W.m_data;
+    //    T* data = m_data;
+    //    T* vdata = v.m_data;
+    //    for (size_t i = 0; i < W.row; i++, vdata++)
+    //    {
+    //        for (size_t j = 0; j < W.col; j++, wdata++)
+    //        {
+    //            data[j] += *wdata * *vdata;
+    //        }
+    //    }
+
+    //    return *this;
+    //}
 
     //template<class T>
     //Vector<T>& Vector<T>::AssignMul(const Matrix<T>& W, const Vector<T>& v)
@@ -340,11 +390,11 @@ namespace FengML
     template<class T>
     Vector<T>& Vector<T>::SoftMax()
     {
-        T minValue = *std::min(m_data, m_data + m_Len);
+        T m = *std::max_element(m_data, m_data + m_Len);
         float sum = 0;
         for (size_t i = 0; i < m_Len; i++)
         {
-            m_data[i] = exp(m_data[i] - minValue);
+            m_data[i] = exp(m_data[i] - m);
             sum += m_data[i];
         }
 

@@ -23,7 +23,7 @@ namespace FengML
         Matrix(const Matrix<T>& other);
         Matrix(Matrix<T>&& other);
         virtual ~Matrix();
-        void FanInFanOutRandomize();
+        void FanInFanOutRandomize(const boost::random::mt19937& generator);
         Matrix& operator = (const Matrix<T>& other);
         Matrix& operator = (Matrix<T>&& other);
         Matrix<T>& AddMul(const Vector<T>& a, const Vector<T>& b);
@@ -181,10 +181,9 @@ namespace FengML
     }
     
     template<class T>
-    void Matrix<T>::FanInFanOutRandomize()
+    void Matrix<T>::FanInFanOutRandomize(const boost::random::mt19937& generator)
     {
 //        boost::random::mt19937 generator((uint32_t)time(0));
-        boost::random::mt19937 generator(123456789);
         boost::uniform_01<boost::random::mt19937> dist(generator);
 
         T r = static_cast<T>(4 * sqrt(6.0 / (row + col)));

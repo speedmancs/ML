@@ -21,6 +21,7 @@ namespace FengML
                     ClearGradient();
                 }
 
+                size_t pred = Eval(trainingSet.GetData(j));
                 ComputeGradient(trainingSet.GetData(j), trainingSet.GetTarget(j));
                 if (j % m_config.batchSize == m_config.batchSize - 1 ||
                     j == trainingSet.Size() - 1)

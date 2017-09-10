@@ -1,5 +1,6 @@
 #include "..\MachineLearningLib\Data\MnistDataSet.h"
 #include "..\MachineLearningLib\Model\LRModel.h"
+#include "..\MachineLearningLib\Model\VanillaNNModel.h"
 #include <string>
 using namespace FengML;
 using namespace std;
@@ -16,15 +17,29 @@ int main(int argc, char** argv)
     MnistDataSet testSet(10);
     testSet.Load(testFile, testLabelFile);
 
-    Configuration config;
-    config.batchSize = 128;
-    config.category_number = 10;
-    config.feature_number = 28 * 28;
-    config.learning_rate = 0.1f;
-    config.train_epoch = 200;
-    LRModel model(config);
-    model.Fit(trainSet, testSet);
-    //float loss;
-    //float accuracy = model.Test(testSet, loss);
-    //cout << "in test set: accuracy:" << accuracy << " with loss:" << loss << endl;
+    string modelType = argv[1];
+    if (modelType == "lr")
+    {
+        Configuration config;
+        config.batchSize = 128;
+        config.category_number = 10;
+        config.feature_number = 28 * 28;
+        config.learning_rate = 0.1f;
+        config.train_epoch = 200;
+        LRModel model(config);
+        model.Fit(trainSet, testSet);
+    }
+    else if (modelType == "nn")
+    {
+        VanillaNNConfiguration config;
+        config.batchSize = 1;
+        config.category_number = 10;
+        config.feature_number = 28 * 28;
+        config.learning_rate = 0.001f;
+        config.train_epoch = 20;
+        config.LayerNumber = 2;
+        config.hiddenLayerSizes = {10};
+        VanillaNNModel model(config);
+        model.Fit(trainSet, testSet);
+    }
 }
