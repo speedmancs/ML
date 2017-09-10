@@ -2,7 +2,7 @@
 #include "boost/random/uniform_01.hpp"
 namespace FengML
 {
-    LRModel::LRModel(const Configuration& config):m_config(config)
+    LRModel::LRModel(const Configuration& config): Model(config)
     {
         b = Vector<float>(m_config.category_number); // initilized to all 0
         W = Matrix<float>(m_config.category_number, config.feature_number);
@@ -11,23 +11,15 @@ namespace FengML
         dW = Matrix<float>(W.Row(), W.Col());
     }
 
-    float LRModel::Test(const DataSet& dataSet, float& loss)
+    float LRModel::Loss(const OneHotVector& y)
     {
-        size_t total = dataSet.Size();
-        size_t correct = 0;
-        loss = 0;
-        for (int i = 0; i < total; i++)
-        {
-            auto predicted = Eval(dataSet.GetData(i));            
-            if (predicted == dataSet.GetTarget(i).HotIndex())
-            {
-                correct++;
-            }
+        return y_hat.CrossEntropyError(y);
+    }
 
-            loss += y_hat.CrossEntropyError(dataSet.GetTarget(i));
-        }
-
-        return correct / (float)total;
+    void LRModel::ClearGradient()
+    {
+        db = 0;
+        dW = 0;
     }
 
     void LRModel::Update()
@@ -47,42 +39,6 @@ namespace FengML
         dW.AddMul(y_diff, x);
     }
 
-    // Use SGD
-    //
-    void LRModel::Fit(const DataSet& trainingSet, const DataSet& validateSet)
-    {
-        float loss;
-        for (int i = 0; i < m_config.train_epoch; i++)
-        {
-            std::cout << "Epoch:" << i << std::endl;
-            for (size_t j = 0; j < trainingSet.Size(); j++)
-            {
-                if (j % 100 == 0)
-                {
-                    std::cout <<"\r" << j << " samples scanned";
-                }
-
-                if (j % m_config.batchSize == 0)
-                {
-                    db = 0;
-                    dW = 0;
-                }
-
-                ComputeGradient(trainingSet.GetData(j), trainingSet.GetTarget(j));
-
-                if (j % m_config.batchSize == m_config.batchSize - 1 ||
-                    j == trainingSet.Size() - 1)
-                {
-                    Update();
-                }
-            }
-            float accuracy = Test(trainingSet, loss);
-            std::cout << std::endl << "In training set, accuracy : " << accuracy << " loss: " << loss << std::endl;
-            accuracy = Test(validateSet, loss);
-            std::cout << std::endl << "In validate set, accuracy : " << accuracy << " loss: " << loss << std::endl;
-        }
-    }
-
     size_t LRModel::Eval(const Vector<float>& x)
     {
         // y_hat = softmax(Wx + b);
@@ -99,5 +55,4 @@ namespace FengML
     {
         return true;
     }
-
 }

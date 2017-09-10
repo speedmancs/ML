@@ -9,15 +9,14 @@ namespace FengML
     public:
         LRModel() = default;
         LRModel(const Configuration& config);
-        void Fit(const DataSet& trainingSet, const DataSet& validateSet) override;
-        void ComputeGradient(const Vector<float>& x, const OneHotVector& y);
-        void Update();
-        float Test(const DataSet& dataSet, float& loss) override;
+        void ComputeGradient(const Vector<float>& x, const OneHotVector& y) override;
+        void Update() override;
         size_t Eval(const Vector<float>& data) override;
+        float Loss(const OneHotVector& y) override;
+        void ClearGradient() override;
         bool Load(const std::string& filePath) override;
         bool Save(const std::string& filePath) override;
     private:
-        Configuration m_config;
         Matrix<float> W;
         Vector<float> b;
         Matrix<float> dW;
