@@ -4,6 +4,7 @@ namespace FengML
     class OneHotVector
     {
     public:
+        OneHotVector() = default;
         OneHotVector(size_t index, size_t len) : m_Len(len), m_index(index) {}
         virtual ~OneHotVector() {}
         size_t Size() const

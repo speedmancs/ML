@@ -27,19 +27,30 @@ int main(int argc, char** argv)
         config.learning_rate = 0.1f;
         config.train_epoch = 200;
         LRModel model(config);
-        model.Fit(trainSet, testSet);
+        MnistDataSet subset(trainSet, 1000);
+        model.Fit(subset, testSet);
     }
     else if (modelType == "nn")
     {
+        // rate batchsize hidden epoch
+        // 0.001 10       50      20
         VanillaNNConfiguration config;
-        config.batchSize = 1;
-        config.category_number = 10;
+        config.batchSize = atoi(argv[3]);
+        config.category_number = 200;
         config.feature_number = 28 * 28;
-        config.learning_rate = 0.001f;
-        config.train_epoch = 20;
+        config.learning_rate = atof(argv[2]);
+        config.train_epoch = atoi(argv[5]);
         config.LayerNumber = 2;
-        config.hiddenLayerSizes = {10};
+        config.hiddenLayerSizes = {atoi(argv[4])};
         VanillaNNModel model(config);
-        model.Fit(trainSet, testSet);
+        MnistDataSet subset(trainSet, 1000);
+        if (atoi(argv[6]))
+        {
+            model.Fit(subset, testSet);
+        }
+        else
+        {
+            model.Fit(trainSet, testSet);
+        }
     }
 }

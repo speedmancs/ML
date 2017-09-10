@@ -61,14 +61,14 @@ namespace FengML
 
         for (int i = 0; i < L; i++)
         {
-            d_biases[i] = gradient_layers[i];
+            d_biases[i].Add(gradient_layers[i]);
             if (i > 0)
             {
-                d_weights[i].AssignMul(gradient_layers[i], activate_layers[i - 1]);
+                d_weights[i].AddMul(gradient_layers[i], activate_layers[i - 1]);
             }
             else
             {
-                d_weights[i].AssignMul(gradient_layers[i], x);
+                d_weights[i].AddMul(gradient_layers[i], x);
             }
         }
     }
