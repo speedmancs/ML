@@ -10,6 +10,8 @@ namespace FengML
     public:
         VanillaNNModel() = default;
         VanillaNNModel(const VanillaNNConfiguration& config);
+        VanillaNNModel(const VanillaNNConfiguration& config, const std::string& modelFile);
+        void Initialize();
         void ComputeGradient(const Vector<float>& x, const OneHotVector& y) override;
         void Update() override;
         size_t Eval(const Vector<float>& data) override;

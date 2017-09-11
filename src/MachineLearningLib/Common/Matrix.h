@@ -4,6 +4,7 @@
 #include "boost/random/mersenne_twister.hpp"
 #include <ctime>
 #include <cmath>
+#include <fstream>
 #include <cassert>
 namespace FengML
 {
@@ -91,6 +92,10 @@ namespace FengML
         }
         Matrix<T>& AssignMul(const Vector<T>& a, const Vector<T>& b);
 
+        template<class U>
+        friend std::ofstream& operator << (std::ofstream& fout, const Matrix<U>& m);
+        template<class U>
+        friend std::ifstream& operator >> (std::ifstream& fin, Matrix<U>& m);
     private:
         T *m_data;
         size_t row;
@@ -236,5 +241,30 @@ namespace FengML
         }
 
         return *this;
+    }
+
+    template<class T>
+    std::ofstream& operator << (std::ofstream& fout, const Matrix<T>& m)
+    {
+        fout << m.row << " " << m.col << std::endl;
+        for (int i = 0; i < m.row; i++)
+        {
+            for (int j = 0; j < m.col; j++)
+            {
+                fout << m(i, j) << " ";
+            }
+            fout << std::endl;
+        }
+        return fout;
+    }
+
+    template<class T>
+    std::ifstream& operator >> (std::ifstream& fin, Matrix<T>& m)
+    {
+        fin >> m.row >> m.col;
+        m.Resize(m.row, m.col);
+        for (int i = 0; i < m.row * m.col; i++)
+            fin >> m.m_data[i];
+        return fin;
     }
 }

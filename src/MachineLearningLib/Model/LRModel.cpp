@@ -1,5 +1,6 @@
 #include "LRModel.h"
 #include "boost/random/uniform_01.hpp"
+#include <fstream>
 namespace FengML
 {
     LRModel::LRModel(const Configuration& config): Model(config)
@@ -8,6 +9,13 @@ namespace FengML
         b = Vector<float>(m_config.category_number); // initilized to all 0
         W = Matrix<float>(m_config.category_number, config.feature_number);
         W.FanInFanOutRandomize(generator);
+        db = Vector<float>(b.Size());
+        dW = Matrix<float>(W.Row(), W.Col());
+    }
+
+    LRModel::LRModel(const Configuration& config, const std::string& modelFile): Model(config)
+    {
+        Load(modelFile);
         db = Vector<float>(b.Size());
         dW = Matrix<float>(W.Row(), W.Col());
     }
@@ -47,11 +55,19 @@ namespace FengML
 
     bool LRModel::Load(const std::string& filePath)
     {
+        std::ifstream fin(filePath.c_str());
+        std::string description;
+        fin >> description;
+        fin >> b >> W;
+
         return true;
     }
 
     bool LRModel::Save(const std::string& filePath)
     {
+        std::ofstream fout(filePath.c_str());
+        fout << "LRModel" << std::endl;
+        fout << b << W;
         return true;
     }
 }

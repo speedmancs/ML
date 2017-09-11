@@ -9,6 +9,7 @@ namespace FengML
     public:
         LRModel() = default;
         LRModel(const Configuration& config);
+        LRModel(const Configuration& config, const std::string& modelFile);
         void ComputeGradient(const Vector<float>& x, const OneHotVector& y) override;
         void Update() override;
         size_t Eval(const Vector<float>& data) override;

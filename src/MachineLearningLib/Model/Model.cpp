@@ -27,12 +27,13 @@ namespace FengML
                     j == trainingSet.Size() - 1)
                 {
                     Update();
+                    //Save("temp.txt");
                 }
             }
             float accuracy = Test(trainingSet, loss);
             std::cout << std::endl << "In training set, accuracy : " << accuracy << " loss: " << loss << std::endl;
             accuracy = Test(validateSet, loss);
-            std::cout << std::endl << "In validate set, accuracy : " << accuracy << " loss: " << loss << std::endl;
+            std::cout << "In validate set, accuracy : " << accuracy << " loss: " << loss << std::endl << std::endl;
         }
     }
 

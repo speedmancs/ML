@@ -65,6 +65,7 @@ namespace FengML
                 m_data[i] = value;
             return *this;
         }
+
         Vector<T>& operator = (const Vector<T>& other);
         Vector<T>& operator = (Vector<T>&& other);
 
@@ -160,7 +161,10 @@ namespace FengML
             assert(index < m_Len);
             return m_data[index];
         }
-
+        template<class U>
+        friend std::ofstream& operator << (std::ofstream& fout, const Vector<U>& v);
+        template<class U>
+        friend std::ifstream& operator >> (std::ifstream& fin, Vector<U>& v);
     protected:
         T *m_data;
         size_t m_Len;
@@ -411,7 +415,7 @@ namespace FengML
     {
         for (size_t i = 0; i < m_Len; i++)
         {
-            m_data[i] = static_cast<T>(1.0 / 1 + exp(-m_data[i]));
+            m_data[i] = static_cast<T>(1.0 / (1 + exp(-m_data[i])));
         }
 
         return *this;
@@ -456,5 +460,25 @@ namespace FengML
         }
 
         return res;
+    }
+
+    template<class T>
+    std::ofstream& operator << (std::ofstream& fout, const Vector<T>& v)
+    {
+        fout << v.m_Len << std::endl;
+        for (int i = 0; i < v.m_Len; i++)
+            fout << v.m_data[i] << " ";
+        fout << std::endl;
+        return fout;
+    }
+
+    template<class T>
+    std::ifstream& operator >> (std::ifstream& fin, Vector<T>& v)
+    {
+        fin >> v.m_Len;
+        v.Resize(v.m_Len);
+        for (int i = 0; i < v.m_Len; i++)
+            fin >> v.m_data[i];
+        return fin;
     }
 }

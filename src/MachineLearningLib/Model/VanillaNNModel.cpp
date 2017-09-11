@@ -1,34 +1,29 @@
 #include "VanillaNNModel.h"
 namespace FengML
 {
+    VanillaNNModel::VanillaNNModel(const VanillaNNConfiguration& config, const std::string& modelFile):
+        Model(config), m_config(config)
+    {
+        Load(modelFile);
+        Initialize();
+    }
+
     VanillaNNModel::VanillaNNModel(const VanillaNNConfiguration& config)
         :Model(config), m_config(config)
     {
         int L = m_config.LayerNumber;
         biases.resize(L);
         weights.resize(L);
-        d_biases.resize(L);
-        d_weights.resize(L);
         for (int i = 0; i < L - 1; i++)
         {
             int hidden = m_config.hiddenLayerSizes[i];
             biases[i] = Vector<float>(hidden);
-            d_biases[i] = biases[i];
-            if (i == 0)
-            {
-                weights[i] = Matrix<float>(hidden, m_config.feature_number);
-            }
-            else
-            {
-                weights[i] = Matrix<float>(hidden, m_config.hiddenLayerSizes[i-1]);
-            }
-            d_weights[i] = weights[i];
+            weights[i] = Matrix<float>(hidden,
+                i == 0 ? m_config.feature_number : m_config.hiddenLayerSizes[i - 1]);
         }
 
         biases[L - 1] = Vector<float>(m_config.category_number);
-        d_biases[L - 1] = biases[L - 1];
         weights[L - 1] = Matrix<float>(m_config.category_number, m_config.hiddenLayerSizes.back());
-        d_weights[L - 1] = weights[L - 1];
 
         boost::random::mt19937 generator(123456789);
         for (int i = 0; i < L; i++)
@@ -36,17 +31,27 @@ namespace FengML
             weights[i].FanInFanOutRandomize(generator);
         }
 
+        Initialize();
+    }
+
+    void VanillaNNModel::Initialize()
+    {
+        int L = m_config.LayerNumber;
+        d_biases.resize(L);
+        d_weights.resize(L);
         layers.resize(L);
         activate_layers.resize(L);
         gradient_layers.resize(L);
         for (int i = 0; i < L; i++)
         {
-            layers[i] = biases[i];
-            activate_layers[i] = biases[i];
-            gradient_layers[i] = biases[i];
+            size_t dim = biases[i].Size();
+            d_biases[i].Resize(dim);
+            layers[i].Resize(dim);
+            activate_layers[i].Resize(dim);
+            gradient_layers[i].Resize(dim);
+            d_weights[i].Resize(weights[i].Row(), weights[i].Col());
         }
     }
-
     void VanillaNNModel::ComputeGradient(const Vector<float>& x, const OneHotVector& y)
     {
         int L = m_config.LayerNumber;
@@ -54,7 +59,8 @@ namespace FengML
         (gradient_layers[L - 1] = y_hat).Sub(y);
         for (int i = L - 2; i >= 0; i--)
         {
-            gradient_layers[i].AssignMulTMat(weights[i + 1], gradient_layers[i + 1]);
+            gradient_layers[i].AssignMulTMat(weights[i + 1], 
+                gradient_layers[i + 1]);            
             gradient_layers[i].Mul(activate_layers[i])
                 .MulScalarVecSub(1.0f, activate_layers[i]);
         }
@@ -62,14 +68,8 @@ namespace FengML
         for (int i = 0; i < L; i++)
         {
             d_biases[i].Add(gradient_layers[i]);
-            if (i > 0)
-            {
-                d_weights[i].AddMul(gradient_layers[i], activate_layers[i - 1]);
-            }
-            else
-            {
-                d_weights[i].AddMul(gradient_layers[i], x);
-            }
+            d_weights[i].AddMul(gradient_layers[i], 
+                i > 0 ? activate_layers[i - 1] : x);
         }
     }
 
@@ -91,23 +91,12 @@ namespace FengML
         Vector<float>& y_hat = activate_layers[L - 1];
         for (int i = 0; i < L; i++)
         {
-            if (i == 0)
-            {
-                layers[i].AssignMul(weights[i], data).Add(biases[i]);
-            }
-            else
-            {
-                layers[i].AssignMul(weights[i], activate_layers[i - 1]).Add(biases[i]);
-            }
+            layers[i].AssignMul(weights[i], 
+                i == 0 ? data : activate_layers[i - 1]).Add(biases[i]);
             
-            if (i != L - 1)
-            {
-                (activate_layers[i] = layers[i]).Sigmod();
-            }
-            else
-            {
-                (activate_layers[i] = layers[i]).SoftMax();
-            }
+            activate_layers[i] = layers[i];
+            if (i != L - 1) activate_layers[i].Sigmod();
+            else activate_layers[i].SoftMax();
         }
 
         return y_hat.Max().second;
@@ -131,11 +120,24 @@ namespace FengML
 
     bool VanillaNNModel::Load(const std::string& filePath)
     {
+        std::ifstream fin(filePath.c_str());
+        std::string str;
+        fin >> str;
+        for (int i = 0; i < m_config.LayerNumber; i++)
+        {
+            fin >> biases[i] >> weights[i];
+        }
         return true;
     }
 
     bool VanillaNNModel::Save(const std::string& filePath)
     {
+        std::ofstream fout(filePath.c_str());
+        fout << "VanillaNN" << std::endl;
+        for (int i = 0; i < m_config.LayerNumber; i++)
+        {
+            fout << biases[i] << weights[i];
+        }
         return true;
     }
 }

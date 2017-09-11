@@ -1,0 +1,10 @@
+1. implement RNN (using ReLu)
+2. implement LSTM RNN
+3. implement CNN
+4. store configuration in xml files
+5. command line option
+6. treat gradients exploding issue with clipping with pre-defined threshold
+7. Introduce validation set
+8. Adam ?
+9. dropout
+10.L2 regulation
