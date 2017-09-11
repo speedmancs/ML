@@ -142,21 +142,29 @@
     <ClInclude Include="Common\Utility.h" />
     <ClInclude Include="Common\Vector.h" />
     <ClInclude Include="Config\Configuration.h" />
+    <ClInclude Include="Config\RNNConfiguration.h" />
     <ClInclude Include="Config\VanillaNNConfiguration.h" />
     <ClInclude Include="Data\DataSet.h" />
     <ClInclude Include="Data\MnistDataSet.h" />
+    <ClInclude Include="Data\SeqDataSet.h" />
     <ClInclude Include="Model\LRModel.h" />
     <ClInclude Include="Model\Model.h" />
+    <ClInclude Include="Model\RNNModel.h" />
+    <ClInclude Include="Model\SequenceModel.h" />
     <ClInclude Include="Model\VanillaNNModel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Utility.cpp" />
     <ClCompile Include="Config\Configuration.cpp" />
+    <ClCompile Include="Config\RNNConfiguration.cpp" />
     <ClCompile Include="Config\VanillaNNConfiguration.cpp" />
     <ClCompile Include="Data\DataSet.cpp" />
     <ClCompile Include="Data\MnistDataSet.cpp" />
+    <ClCompile Include="Data\SeqDataSet.cpp" />
     <ClCompile Include="Model\LRModel.cpp" />
     <ClCompile Include="Model\Model.cpp" />
+    <ClCompile Include="Model\RNNModel.cpp" />
+    <ClCompile Include="Model\SequenceModel.cpp" />
     <ClCompile Include="Model\VanillaNNModel.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

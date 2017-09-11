@@ -18,6 +18,9 @@ namespace FengML
 
         template<class T>
         friend class Vector;
+
+        template<class T>
+        friend class Matrix;
     private:
         size_t m_index;
         size_t m_Len;

@@ -69,6 +69,19 @@ namespace FengML
         Vector<T>& operator = (const Vector<T>& other);
         Vector<T>& operator = (Vector<T>&& other);
 
+        Vector<T>& AddMul(const Matrix<T>& m, const Vector<T>& v)
+        {
+            T * mdata = m.m_data;
+            for (int i = 0; i < m_Len; i++)
+            {
+                for (int j = 0; j < v.m_Len; j++, mdata ++)
+                {
+                    m_data[i] += *mdata + v.m_data[j];
+                }
+            }
+            return *this;
+        }
+
         void Resize(size_t len);
         Vector<T>& AddMul(T scale, const Vector<T>& other);
         Vector<T>& Add(const Vector<T>& other)
@@ -115,12 +128,31 @@ namespace FengML
         Vector<T>& MulScalarVecSub(T value, const Vector<T>& other)
         {
             for (int i = 0; i < m_Len; i++)
-                m_data[i] = m_data[i] * (value - other.m_data[i]);
+                m_data[i] *= value - other.m_data[i];
+            return *this;
+        }
+
+        Vector<T>& MulScalarVec2Sub(T value, const Vector<T>& other)
+        {
+            for (int i = 0; i < m_Len; i++)
+                m_data[i] *= value - other.m_data[i] * other.m_data[i];
             return *this;
         }
 
         // W * v
         Vector<T>& AssignMul(const Matrix<T>& W, const Vector<T>& v);
+
+        Vector<T>& AssignMul(const Matrix<T>& W, const OneHotVector& v)
+        {
+            Resize(W.row);
+            T* wdata = W.m_data + v.m_index;
+            for (int i = 0; i < m_Len; i++, wdata += W.col)
+            {
+                m_data[i] = *wdata;
+            }
+            return *this;
+        }
+
         // W' * v
         Vector<T>& AssignMulTMat(const Matrix<T>& W, const Vector<T>& v);
         Vector<T>& operator += (const Vector<T>& other);

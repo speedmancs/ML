@@ -2,6 +2,7 @@
 #include <vector>
 #include "boost/random/uniform_01.hpp"
 #include "boost/random/mersenne_twister.hpp"
+#include "OneHotVector.h"
 #include <ctime>
 #include <cmath>
 #include <fstream>
@@ -83,6 +84,18 @@ namespace FengML
         {
             assert(_row < row && _col < col);
             return m_data[_row * col + _col];
+        }
+
+        Matrix<T>& AddMul(const Vector<T>& a, const OneHotVector& b)
+        {
+            Resize(a.Size(), b.Size());
+            size_t col = b.m_index;
+            T* data = m_data + col;
+            for (int i = 0; i < row; i++, data += col)
+            {
+                *data = a[i];
+            }
+            return *this;
         }
 
         Matrix<T>& Add(T scale, const Matrix<T>& other);

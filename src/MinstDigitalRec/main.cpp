@@ -42,8 +42,10 @@ int main(int argc, char** argv)
         config.feature_number = 28 * 28;
         config.learning_rate = (float)atof(argv[2]);
         config.train_epoch = atoi(argv[5]);
-        config.LayerNumber = 2;
-        config.hiddenLayerSizes = { atoi(argv[4]) };
+        //config.LayerNumber = 2;
+        //config.hiddenLayerSizes = { atoi(argv[4]) };
+        config.LayerNumber = 3;
+        config.hiddenLayerSizes = { atoi(argv[4]), atoi(argv[4]) };
         VanillaNNModel model(config);
         MnistDataSet subset(trainSet, 1000);
         std::string previousModel = argv[7];
