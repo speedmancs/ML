@@ -33,12 +33,9 @@ int main(int argc, char** argv)
     }
     else if (modelType == "nn")
     {
-        //nn rate batchsize hidden epoch 0
+        //nn rate batchsize hidden epoch use_subset_train pre_trained_model
         // rate batchsize hidden epoch
-        // 0.001 128       50      100
-        // 0.001 10        50      100
-        // .\MinstDigitalRec.exe nn 0.001 10 50 27 1 no
-        // .\MinstDigitalRec.exe nn 0.001 10 50 1 1 vnnModel_start.txt
+        // .\MinstDigitalRec.exe nn 0.1 128 50 200 0 no
         VanillaNNConfiguration config;
         config.batchSize = atoi(argv[3]);
         config.category_number = 200;
