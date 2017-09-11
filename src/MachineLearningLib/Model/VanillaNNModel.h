@@ -10,12 +10,10 @@ namespace FengML
     public:
         VanillaNNModel() = default;
         VanillaNNModel(const VanillaNNConfiguration& config);
-        VanillaNNModel(const VanillaNNConfiguration& config, const std::string& modelFile);
-        void Initialize();
+        void Setup();
         void ComputeGradient(const Vector<float>& x, const OneHotVector& y) override;
         void Update() override;
         size_t Eval(const Vector<float>& data) override;
-        float Loss(const OneHotVector& y) override;
         void ClearGradient() override;
         bool Load(const std::string& filePath) override;
         bool Save(const std::string& filePath) override;
@@ -25,7 +23,6 @@ namespace FengML
         std::vector<Matrix<float>> weights;
         std::vector<Vector<float>> d_biases;
         std::vector<Matrix<float>> d_weights;
-
         std::vector<Vector<float>> layers;
         std::vector<Vector<float>> activate_layers;
         std::vector<Vector<float>> gradient_layers;

@@ -9,20 +9,7 @@ namespace FengML
         b = Vector<float>(m_config.category_number); // initilized to all 0
         W = Matrix<float>(m_config.category_number, config.feature_number);
         W.FanInFanOutRandomize(generator);
-        db = Vector<float>(b.Size());
-        dW = Matrix<float>(W.Row(), W.Col());
-    }
-
-    LRModel::LRModel(const Configuration& config, const std::string& modelFile): Model(config)
-    {
-        Load(modelFile);
-        db = Vector<float>(b.Size());
-        dW = Matrix<float>(W.Row(), W.Col());
-    }
-
-    float LRModel::Loss(const OneHotVector& y)
-    {
-        return y_hat.CrossEntropyError(y);
+        Setup();
     }
 
     void LRModel::ClearGradient()
@@ -49,8 +36,14 @@ namespace FengML
     size_t LRModel::Eval(const Vector<float>& x)
     {
         // y_hat = softmax(Wx + b);
-        y_hat.AssignMul(W, x).Add(b).SoftMax(); 
+        y_hat.AssignMul(W, x).Add(b).SoftMax();
         return y_hat.Max().second;
+    }
+
+    void LRModel::Setup()
+    {
+        db = Vector<float>(b.Size());
+        dW = Matrix<float>(W.Row(), W.Col());
     }
 
     bool LRModel::Load(const std::string& filePath)
@@ -59,7 +52,7 @@ namespace FengML
         std::string description;
         fin >> description;
         fin >> b >> W;
-
+        Setup();
         return true;
     }
 

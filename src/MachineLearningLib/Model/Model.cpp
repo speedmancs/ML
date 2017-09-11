@@ -1,6 +1,11 @@
 #include "Model.h"
 namespace FengML
 {
+    float Model::Loss(const OneHotVector& y)
+    {
+        return y_hat.CrossEntropyError(y);
+    }
+
     // Use SGD
     //
     void Model::Fit(const DataSet& trainingSet, const DataSet& validateSet)

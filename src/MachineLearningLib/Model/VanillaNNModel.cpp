@@ -1,13 +1,6 @@
 #include "VanillaNNModel.h"
 namespace FengML
 {
-    VanillaNNModel::VanillaNNModel(const VanillaNNConfiguration& config, const std::string& modelFile):
-        Model(config), m_config(config)
-    {
-        Load(modelFile);
-        Initialize();
-    }
-
     VanillaNNModel::VanillaNNModel(const VanillaNNConfiguration& config)
         :Model(config), m_config(config)
     {
@@ -31,10 +24,10 @@ namespace FengML
             weights[i].FanInFanOutRandomize(generator);
         }
 
-        Initialize();
+        Setup();
     }
 
-    void VanillaNNModel::Initialize()
+    void VanillaNNModel::Setup()
     {
         int L = m_config.LayerNumber;
         d_biases.resize(L);
@@ -87,8 +80,7 @@ namespace FengML
 
     size_t VanillaNNModel::Eval(const Vector<float>& data)
     {
-        int L = m_config.LayerNumber;
-        Vector<float>& y_hat = activate_layers[L - 1];
+        int L = m_config.LayerNumber;        
         for (int i = 0; i < L; i++)
         {
             layers[i].AssignMul(weights[i], 
@@ -99,14 +91,8 @@ namespace FengML
             else activate_layers[i].SoftMax();
         }
 
+        y_hat = activate_layers[L - 1];
         return y_hat.Max().second;
-    }
-
-    float VanillaNNModel::Loss(const OneHotVector& y)
-    {
-        int L = m_config.LayerNumber;
-        Vector<float>& y_hat = activate_layers[L - 1];
-        return y_hat.CrossEntropyError(y);
     }
 
     void VanillaNNModel::ClearGradient()
@@ -127,6 +113,8 @@ namespace FengML
         {
             fin >> biases[i] >> weights[i];
         }
+
+        Setup();
         return true;
     }
 
