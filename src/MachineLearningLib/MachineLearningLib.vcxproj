@@ -152,6 +152,7 @@
     <ClInclude Include="Model\RNNModel.h" />
     <ClInclude Include="Model\SequenceModel.h" />
     <ClInclude Include="Model\VanillaNNModel.h" />
+    <ClInclude Include="tinyxml2\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Utility.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Model\RNNModel.cpp" />
     <ClCompile Include="Model\SequenceModel.cpp" />
     <ClCompile Include="Model\VanillaNNModel.cpp" />
+    <ClCompile Include="tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,5 @@
 #include "VanillaNNModel.h"
+#include <cstdlib>
 namespace FengML
 {
     VanillaNNModel::VanillaNNModel(const VanillaNNConfiguration& config)
@@ -18,10 +19,10 @@ namespace FengML
         biases[L - 1] = Vector<float>(m_config.category_number);
         weights[L - 1] = Matrix<float>(m_config.category_number, m_config.hiddenLayerSizes.back());
 
-        boost::random::mt19937 generator(123456789);
+        std::srand(123456789);
         for (int i = 0; i < L; i++)
         {
-            weights[i].FanInFanOutRandomize(generator);
+            weights[i].FanInFanOutRandomize();
         }
 
         Setup();
@@ -118,9 +119,9 @@ namespace FengML
         return true;
     }
 
-    bool VanillaNNModel::Save(const std::string& filePath)
+    bool VanillaNNModel::Save()
     {
-        std::ofstream fout(filePath.c_str());
+        std::ofstream fout(m_config.modelSavePath.c_str());
         fout << "VanillaNN" << std::endl;
         for (int i = 0; i < m_config.LayerNumber; i++)
         {

@@ -9,8 +9,8 @@ namespace FengML
         VanillaNNConfiguration() = default;
         virtual bool Load(const std::string& filePath);
         virtual bool Save(const std::string& filePath);
-        
         int LayerNumber;
         std::vector<int> hiddenLayerSizes;
+        virtual std::unique_ptr<Model> CreateModel() override;
     };
 }

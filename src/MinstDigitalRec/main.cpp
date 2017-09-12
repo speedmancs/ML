@@ -2,66 +2,26 @@
 #include "..\MachineLearningLib\Model\LRModel.h"
 #include "..\MachineLearningLib\Model\VanillaNNModel.h"
 #include <string>
+#include <memory>
+#include <iostream>
 using namespace FengML;
 using namespace std;
 int main(int argc, char** argv)
 {
-    std::string trainFile = "C:\\workspace\\github\\mnist\\train-images.idx3-ubyte";
-    std::string trainLabelFile = "C:\\workspace\\github\\mnist\\train-labels.idx1-ubyte";
-    std::string testFile = "C:\\workspace\\github\\mnist\\t10k-images.idx3-ubyte";
-    std::string testLabelFile = "C:\\workspace\\github\\mnist\\t10k-labels.idx1-ubyte";
-    std::string dumpTrainFile = "C:\\workspace\\github\\mnist\\train_dump.txt";
-    std::string dumpTestFile = "C:\\workspace\\github\\mnist\\test_dump.txt";
-    std::string rootFolder = "C:\\workspace\\github\\mnist\\";
-    MnistDataSet trainSet(10);
-    trainSet.Load(trainFile, trainLabelFile);
-    MnistDataSet testSet(10);
-    testSet.Load(testFile, testLabelFile);
-
-    string modelType = argv[1];
-    if (modelType == "lr")
+    if (argc < 2)
     {
-        Configuration config;
-        config.batchSize = 128;
-        config.category_number = 10;
-        config.feature_number = 28 * 28;
-        config.learning_rate = 0.1f;
-        config.train_epoch = 200;
-        LRModel model(config);
-        MnistDataSet subset(trainSet, 1000);
-        model.Fit(subset, testSet);
+        cout << "MinstDigitalRec.exe <config file path>" << endl;
+        return 0;
     }
-    else if (modelType == "nn")
-    {
-        //nn rate batchsize hidden epoch use_subset_train pre_trained_model
-        // rate batchsize hidden epoch
-        // .\MinstDigitalRec.exe nn 0.1 128 50 200 0 no
-        VanillaNNConfiguration config;
-        config.batchSize = atoi(argv[3]);
-        config.category_number = 200;
-        config.feature_number = 28 * 28;
-        config.learning_rate = (float)atof(argv[2]);
-        config.train_epoch = atoi(argv[5]);
-        //config.LayerNumber = 2;
-        //config.hiddenLayerSizes = { atoi(argv[4]) };
-        config.LayerNumber = 3;
-        config.hiddenLayerSizes = { atoi(argv[4]), atoi(argv[4]) };
-        VanillaNNModel model(config);
-        MnistDataSet subset(trainSet, 1000);
-        std::string previousModel = argv[7];
-        if (previousModel != "no")
-        {
-            model.Load(previousModel);
-        }
-        if (atoi(argv[6]))
-        {
-            model.Fit(subset, testSet);
-        }
-        else
-        {
-            model.Fit(trainSet, testSet);
-        }
 
-        model.Save(rootFolder + "vnnModel.txt");
-    }
+    string configPath = argv[1];
+    auto pConfig = Configuration::CreateConfiguration(configPath);
+
+    MnistDataSet trainSet(pConfig->category_number);
+    trainSet.Load(pConfig->trainingDataPath, pConfig->trainingLabelPath);
+    MnistDataSet testSet(pConfig->category_number);
+    testSet.Load(pConfig->validateDataPath, pConfig->validateLabelPath);
+    auto pModel = pConfig->CreateModel();
+    pModel->Fit(trainSet, testSet);
+    pModel->Save();
 }

@@ -1,4 +1,5 @@
 #include "SequenceModel.h"
+#include <iostream>
 #include "..\Common\Vector.h"
 namespace FengML
 {

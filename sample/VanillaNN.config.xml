@@ -7,9 +7,11 @@
         <ValidateData path="C:\workspace\github\mnist\t10k-images.idx3-ubyte" labelFile="C:\workspace\github\mnist\t10k-labels.idx1-ubyte"/>
     </DataSetting>
     
-    <ModelSetting type="LR" savePath="C:\workspace\github\ML\lrmodel.txt">
+    <ModelSetting type="VanillaNN" savePath="C:\workspace\github\ML\vnnmodel.txt">
         <TrainEpoch>200</TrainEpoch>
         <LearningRate>0.1</LearningRate>
         <BatchSize>128</BatchSize>
+        <hiddenLayer size="50"/>
+        <hiddenLayer size="50"/>       
     </ModelSetting>
 </Configuration>

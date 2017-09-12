@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "..\Common\CommonDef.h"
 #include "..\Common\Vector.h"
 namespace FengML
 {

@@ -16,7 +16,7 @@ namespace FengML
         size_t Eval(const Vector<float>& data) override;
         void ClearGradient() override;
         bool Load(const std::string& filePath) override;
-        bool Save(const std::string& filePath) override;
+        bool Save() override;
     private:
         const VanillaNNConfiguration& m_config;
         std::vector<Vector<float>> biases;

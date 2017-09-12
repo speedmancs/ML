@@ -1,4 +1,7 @@
 #include "Model.h"
+#include "LRModel.h"
+#include "VanillaNNModel.h"
+#include <iostream>
 namespace FengML
 {
     float Model::Loss(const OneHotVector& y)

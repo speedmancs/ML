@@ -1,14 +1,14 @@
 #include "LRModel.h"
-#include "boost/random/uniform_01.hpp"
 #include <fstream>
+#include <cstdlib>
 namespace FengML
 {
     LRModel::LRModel(const Configuration& config): Model(config)
     {
-        boost::random::mt19937 generator(123456789);
+        std::srand(123456789);
         b = Vector<float>(m_config.category_number); // initilized to all 0
         W = Matrix<float>(m_config.category_number, config.feature_number);
-        W.FanInFanOutRandomize(generator);
+        W.FanInFanOutRandomize();
         Setup();
     }
 
@@ -56,9 +56,9 @@ namespace FengML
         return true;
     }
 
-    bool LRModel::Save(const std::string& filePath)
+    bool LRModel::Save()
     {
-        std::ofstream fout(filePath.c_str());
+        std::ofstream fout(m_config.modelSavePath.c_str());
         fout << "LRModel" << std::endl;
         fout << b << W;
         return true;

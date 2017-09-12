@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 #include "..\Data\DataSet.h"
 #include "..\Config\Configuration.h"
 namespace FengML
@@ -12,7 +13,7 @@ namespace FengML
         float Test(const DataSet& dataSet, float& loss);
         virtual size_t Eval(const Vector<float>& data) = 0;
         virtual bool Load(const std::string& filePath) = 0;
-        virtual bool Save(const std::string& filePath) = 0;
+        virtual bool Save() = 0;
         virtual void Update() = 0;
         virtual float Loss(const OneHotVector& y);
         virtual void ClearGradient() = 0;

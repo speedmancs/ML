@@ -1,12 +1,11 @@
 #pragma once
 #include <vector>
-#include "boost/random/uniform_01.hpp"
-#include "boost/random/mersenne_twister.hpp"
 #include "OneHotVector.h"
 #include <ctime>
 #include <cmath>
 #include <fstream>
 #include <cassert>
+#include <cstdlib>
 namespace FengML
 {
     template<class T>
@@ -25,7 +24,7 @@ namespace FengML
         Matrix(const Matrix<T>& other);
         Matrix(Matrix<T>&& other);
         virtual ~Matrix();
-        void FanInFanOutRandomize(const boost::random::mt19937& generator);
+        void FanInFanOutRandomize();
         Matrix& operator = (const Matrix<T>& other);
         Matrix& operator = (Matrix<T>&& other);
         Matrix<T>& AddMul(const Vector<T>& a, const Vector<T>& b);
@@ -199,16 +198,14 @@ namespace FengML
     }
     
     template<class T>
-    void Matrix<T>::FanInFanOutRandomize(const boost::random::mt19937& generator)
+    void Matrix<T>::FanInFanOutRandomize()
     {
-//        boost::random::mt19937 generator((uint32_t)time(0));
-        boost::uniform_01<boost::random::mt19937> dist(generator);
-
         T r = static_cast<T>(4 * sqrt(6.0 / (row + col)));
         size_t len = row * col;
         for (size_t i = 0; i < len; i++)
         {
-            m_data[i] = static_cast<T>((dist() * 2 - 1) * r);
+            float val = (std::rand() % 10000) / 10000.0f;
+            m_data[i] = static_cast<T>((val * 2 - 1) * r);
         }
     }
 

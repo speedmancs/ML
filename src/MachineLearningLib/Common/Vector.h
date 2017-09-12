@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <fstream>
+#include <algorithm>
 #include "Matrix.h"
 #include "OneHotVector.h"
 #include <cassert>

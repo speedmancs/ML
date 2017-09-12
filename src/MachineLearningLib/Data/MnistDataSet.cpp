@@ -1,6 +1,7 @@
 #include "MnistDataSet.h"
 #include "..\Common\Utility.h"
 #include <fstream>
+#include <iostream>
 using namespace std;
 namespace FengML
 {
@@ -19,7 +20,7 @@ namespace FengML
         {
             if (i % 1000 == 0)
             {
-                cout << i << " samples dumped" << endl;
+                std::cout << i << " samples dumped" << std::endl;
             }
             fout << "sample " << i << ": label: " << m_targets[i].HotIndex() << endl;
             m_allData[i].Print(fout, col);
