@@ -309,55 +309,18 @@ namespace FengML
         return *this;
     }
 
-    template<class T>
-    Vector<T>& Vector<T>::AssignMul(const Matrix<T>& W, const Vector<T>& v)
-    {
-        Resize(W.row);
-        T* wdata = W.m_data;
-        T* data = m_data;
-        for (size_t i = 0; i < m_Len; i++, data++)
-        {
-            T* vdata = v.m_data;
-            T sum = 0;
-            for (size_t j = 0; j < W.col; j++, vdata++, wdata ++)
-            {
-                sum += *wdata * *vdata;
-            }
-            *data = sum;
-        }
-        return *this;
-    }
-    template<class T>
-    Vector<T>& Vector<T>::AssignMulTMat(const Matrix<T>& W, const Vector<T>& v)
-    {
-        Resize(W.col);
-        *this = 0;
-        for (size_t i = 0; i < m_Len; i++)
-        {
-            for (int j = 0; j < W.row; j++)
-            {
-                m_data[i] += W(j, i) * v[j];
-            }
-        }
-        return *this;
-    }
-
     //template<class T>
     //Vector<T>& Vector<T>::AssignMulTMat(const Matrix<T>& W, const Vector<T>& v)
     //{
     //    Resize(W.col);
     //    *this = 0;
-    //    T* wdata = W.m_data;
-    //    T* data = m_data;
-    //    T* vdata = v.m_data;
-    //    for (size_t i = 0; i < W.row; i++, vdata++)
+    //    for (size_t i = 0; i < m_Len; i++)
     //    {
-    //        for (size_t j = 0; j < W.col; j++, wdata++)
+    //        for (int j = 0; j < W.row; j++)
     //        {
-    //            data[j] += *wdata * *vdata;
+    //            m_data[i] += W(j, i) * v[j];
     //        }
     //    }
-
     //    return *this;
     //}
 
@@ -376,6 +339,44 @@ namespace FengML
     //    }
     //    return *this;
     //}
+
+    template<class T>
+    Vector<T>& Vector<T>::AssignMul(const Matrix<T>& W, const Vector<T>& v)
+    {
+        Resize(W.row);
+        T* wdata = W.m_data;
+        T* data = m_data;
+        for (size_t i = 0; i < m_Len; i++, data++)
+        {
+            T* vdata = v.m_data;
+            T sum = 0;
+            for (size_t j = 0; j < W.col; j++, vdata++, wdata++)
+            {
+                sum += *wdata * *vdata;
+            }
+            *data = sum;
+        }
+        return *this;
+    }
+
+    template<class T>
+    Vector<T>& Vector<T>::AssignMulTMat(const Matrix<T>& W, const Vector<T>& v)
+    {
+        Resize(W.col);
+        *this = 0;
+        T* wdata = W.m_data;
+        T* data = m_data;
+        T* vdata = v.m_data;
+        for (size_t i = 0; i < W.row; i++, vdata++)
+        {
+            for (size_t j = 0; j < W.col; j++, wdata++)
+            {
+                data[j] += *wdata * *vdata;
+            }
+        }
+
+        return *this;
+    }
 
     template<class T>
     Vector<T>& Vector<T>::operator += (const Vector<T>& other)
@@ -435,9 +436,11 @@ namespace FengML
             sum += m_data[i];
         }
 
+        sum = 1.0 / sum;
+
         for (size_t i = 0; i < m_Len; i++)
         {
-            m_data[i] /= sum;
+            m_data[i] *= sum;
         }
 
         return *this;
