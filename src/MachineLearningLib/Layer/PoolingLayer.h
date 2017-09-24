@@ -29,11 +29,13 @@ namespace FengML
     void PoolingLayer::forward()
     {
         // to do
+        PrintDim();
     }
 
     void PoolingLayer::backward()
     {
         // to do
+        PrintDim();
     }
 }
 

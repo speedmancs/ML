@@ -1,6 +1,7 @@
 #pragma once
 #include "Layer.h"
 #include "FlattenLayer.h"
+#include <iostream>
 namespace FengML
 {
     class Tensor3DLayer: public Layer<Tensor3>
@@ -41,6 +42,7 @@ namespace FengML
             return gradient;
         }
 
+        virtual void PrintDim();
     protected:
         std::shared_ptr<FlattenLayer> flattenLayer;
     };
@@ -52,5 +54,14 @@ namespace FengML
         flatten->SetSourceLayer(this);
         flatten->Initialize();
         return flatten;
+    }
+
+    void Tensor3DLayer::PrintDim()
+    {
+        auto d0 = std::get<0>(dim);
+        auto d1 = std::get<1>(dim);
+        auto d2 = std::get<2>(dim);
+        std::cout << "dim3: [" << d0 << "," << d1 << ","
+            << d2 << "]" << std::endl;
     }
 }

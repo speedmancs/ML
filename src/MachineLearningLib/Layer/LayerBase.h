@@ -20,66 +20,35 @@ namespace FengML
         typedef std::vector<Matrix<float>> DataType;
     };
 
+    typedef typename Tensor3::DT Dim3Type;
+
     class LayerBase
     {
     public:
         LayerBase() : previousLayer(nullptr), nextLayer(nullptr){}
-        virtual void forward() {};
-        virtual void backward() {};
-        virtual LayerBase* Previous() {
-            return previousLayer;
-        }
-
-        virtual std::shared_ptr<FlattenLayer> Flatten()
+        virtual void forward() 
         {
-            return std::shared_ptr<FlattenLayer>();
+            PrintDim();
         }
-
-        virtual std::shared_ptr<LayerBase> Next()
+        virtual void backward() 
         {
-            return nextLayer;
+            PrintDim();
         }
-        virtual size_t Dim1()
-        {
-            return 0;
-        }
-
-        virtual void Initialize(){}
-
-        LayerBase& Add(std::shared_ptr<LayerBase> _nextLayer)
-        {
-            nextLayer = _nextLayer;
-            nextLayer->previousLayer = this;
-            nextLayer->Initialize();
-            return *nextLayer;
-        }
-
-        virtual typename Tensor3::DT Dim3()
-        {
-            typename Tensor3::DT dim = { 0, 0, 0 };
-            return dim;
-        }
-
-        virtual typename Tensor1::DataType& GetData1D()
-        {
-            return dummy1d;
-        }
-        virtual typename Tensor1::DataType& GetGradient1D()
-        {
-            return dummy1d;
-        }
-        virtual typename Tensor3::DataType& GetData3D()
-        {
-            return dummy3d;
-        }
-        virtual typename Tensor3::DataType& GetGradient3D()
-        {
-            return dummy3d;
-        }
+        virtual LayerBase* Previous();
+        virtual std::shared_ptr<FlattenLayer> Flatten();
+        virtual std::shared_ptr<LayerBase> Next();
+        virtual void Initialize() {}
+        LayerBase& Add(std::shared_ptr<LayerBase> _nextLayer);
+        virtual size_t Dim1();
+        virtual Dim3Type Dim3();
+        virtual void PrintDim() = 0;
+        virtual typename Tensor1::DataType& GetData1D();
+        virtual typename Tensor1::DataType& GetGradient1D();
+        virtual typename Tensor3::DataType& GetData3D();
+        virtual typename Tensor3::DataType& GetGradient3D();
     protected:
-        typename Tensor1::DataType dummy1d;
-        typename Tensor3::DataType dummy3d;
-
+        static typename Tensor1::DataType dummy1d;
+        static typename Tensor3::DataType dummy3d;
         LayerBase* previousLayer;
         std::shared_ptr<LayerBase> nextLayer;
     };

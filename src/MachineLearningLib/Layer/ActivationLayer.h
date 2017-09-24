@@ -84,64 +84,68 @@ namespace FengML
     template<typename U>
     void ActivationLayer<Tensor1, U>::forward()
     {
-        auto src = previousLayer->GetData1D().Data();
-        auto dst = data.Data();
-        U func;
-        for (size_t i = 0; i < Length(); i++)
-        {
-            *dst = func(*src);
-            src++; dst++;
-        }
+        PrintDim();
+        //auto src = previousLayer->GetData1D().Data();
+        //auto dst = data.Data();
+        //U func;
+        //for (size_t i = 0; i < Length(); i++)
+        //{
+        //    *dst = func(*src);
+        //    src++; dst++;
+        //}
     }
 
     template<typename U>
     void ActivationLayer<Tensor3, U>::forward()
     {
-        U func;
-        auto channel = std::get<0>(dim);
-        size_t len = std::get<1>(dim) * std::get<2>(dim);
-        for (size_t i = 0; i < channel; i++)
-        {
-            auto src = previousLayer->GetData3D()[i].Data();
-            auto dst = data[i].Data();
-            for (size_t j = 0; j < len; j++)
-            {
-                *dst = func(*src);
-                src++; dst++;
-            }
-        }
+        PrintDim();
+        //U func;
+        //auto channel = std::get<0>(dim);
+        //size_t len = std::get<1>(dim) * std::get<2>(dim);
+        //for (size_t i = 0; i < channel; i++)
+        //{
+        //    auto src = previousLayer->GetData3D()[i].Data();
+        //    auto dst = data[i].Data();
+        //    for (size_t j = 0; j < len; j++)
+        //    {
+        //        *dst = func(*src);
+        //        src++; dst++;
+        //    }
+        //}
     }
 
     template<typename U>
     void ActivationLayer<Tensor1, U>::backward()
     {
-        auto _g = gradient.Data();
-        auto dst_data = previousLayer->GetData1D().Data();
-        auto dst_g = previousLayer->GetGradient1D().Data();
-        U func;
-        for (size_t i = 0; i < Length(); i++)
-        {
-            *dst_g = func.d(*dst_data) * (*_g);
-            dst_g++; dst_data++; _g++;
-        }
+        PrintDim();
+        //auto _g = gradient.Data();
+        //auto dst_data = previousLayer->GetData1D().Data();
+        //auto dst_g = previousLayer->GetGradient1D().Data();
+        //U func;
+        //for (size_t i = 0; i < Length(); i++)
+        //{
+        //    *dst_g = func.d(*dst_data) * (*_g);
+        //    dst_g++; dst_data++; _g++;
+        //}
     }
 
     template<typename U>
     void ActivationLayer<Tensor3, U>::backward()
     {
-        U func;
-        auto channel = std::get<0>(dim);
-        size_t len = std::get<1>(dim) * std::get<2>(dim);
-        for (size_t i = 0; i < channel; i++)
-        {
-            auto dst_data = previousLayer->GetData3D()[i].Data();
-            auto dst_g = previousLayer->GetGradient3D()[i].Data();
-            auto _g = gradient[i].Data();
-            for (size_t j = 0; j < len; j++)
-            {
-                *dst_g = func.d(*dst_data) * (*_g);
-                _g++; dst_data++; dst_g++;
-            }
-        }
+        PrintDim();
+        //U func;
+        //auto channel = std::get<0>(dim);
+        //size_t len = std::get<1>(dim) * std::get<2>(dim);
+        //for (size_t i = 0; i < channel; i++)
+        //{
+        //    auto dst_data = previousLayer->GetData3D()[i].Data();
+        //    auto dst_g = previousLayer->GetGradient3D()[i].Data();
+        //    auto _g = gradient[i].Data();
+        //    for (size_t j = 0; j < len; j++)
+        //    {
+        //        *dst_g = func.d(*dst_data) * (*_g);
+        //        _g++; dst_data++; dst_g++;
+        //    }
+        //}
     }
 }

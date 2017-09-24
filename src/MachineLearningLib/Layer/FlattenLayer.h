@@ -34,31 +34,33 @@ namespace FengML
     
     void FlattenLayer::forward()
     {
-        assert(sourceLayer != nullptr);
-        auto& sd = sourceLayer->GetData3D();
-        assert(sd.size() > 0);
-        size_t len = sd[0].Row() * sd[0].Col();
-        auto dst = data.Data();
-        for (auto & mat : sd)
-        {
-            auto p = mat.Data();
-            std::copy(p, p + len, dst);
-            dst += len;
-        }
+        PrintDim();
+        //assert(sourceLayer != nullptr);
+        //auto& sd = sourceLayer->GetData3D();
+        //assert(sd.size() > 0);
+        //size_t len = sd[0].Row() * sd[0].Col();
+        //auto dst = data.Data();
+        //for (auto & mat : sd)
+        //{
+        //    auto p = mat.Data();
+        //    std::copy(p, p + len, dst);
+        //    dst += len;
+        //}
     }
 
     void FlattenLayer::backward()
     {
-        assert(sourceLayer != nullptr);
-        auto& sd = sourceLayer->GetData3D();
-        assert(sd.size() > 0);
-        auto dim = sourceLayer->Dim3();
-        size_t len = std::get<1>(dim) * std::get<2>(dim);
-        auto _g = gradient.Data();
-        for (auto& mat : sd)
-        {
-            std::copy(_g, _g + len, mat.Data());
-            _g += len;
-        }
+        PrintDim();
+        //assert(sourceLayer != nullptr);
+        //auto& sd = sourceLayer->GetData3D();
+        //assert(sd.size() > 0);
+        //auto dim = sourceLayer->Dim3();
+        //size_t len = std::get<1>(dim) * std::get<2>(dim);
+        //auto _g = gradient.Data();
+        //for (auto& mat : sd)
+        //{
+        //    std::copy(_g, _g + len, mat.Data());
+        //    _g += len;
+        //}
     }
 }

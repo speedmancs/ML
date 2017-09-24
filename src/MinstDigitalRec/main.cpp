@@ -27,6 +27,7 @@ typedef ActivationLayer<Tensor1, ReLu> ReLu1;
 
 void forward(shared_ptr<LayerBase> layer)
 {
+    cout << "forward" << endl;
     while (layer != nullptr)
     {
         layer->forward();
@@ -36,6 +37,7 @@ void forward(shared_ptr<LayerBase> layer)
 
 void backward(LayerBase* layer)
 {
+    cout << "backward" << endl;
     while (layer != nullptr)
     {
         layer->backward();

@@ -3,39 +3,36 @@
 #include "..\Common\Matrix.h"
 #include "LayerBase.h"
 #include <vector>
-#include <tuple>
 #include <memory>
 namespace FengML
 {
-    class FlattenLayer;
-
-    typedef typename Tensor3::DT Dim3Type;
     template<typename T>
     class Layer : public LayerBase
     {
     public:
         Layer(){}
         Layer(typename T::DT dimension){}
-
         void Initialize(typename T::DT dim);
+        virtual void Initialize();
         size_t Length();
-
-        virtual void Initialize();        
-        void SetData(const typename T::DataType& _d)
-        {
-            data = _d;
-        }
-        
-        virtual std::shared_ptr<FlattenLayer> Flatten()
-        {
-            return nullptr;
-        }
-
+        void SetData(const typename T::DataType& _d);
     protected:
         typename T::DT dim;
         typename T::DataType data;
         typename T::DataType gradient;
     };
+
+    template<typename T>
+    void Layer<T>::SetData(const typename T::DataType& _d)
+    {
+        data = _d;
+    }
+
+    template<>
+    Layer<Tensor1>::Layer(size_t dimension) : dim(dimension)
+    {
+        Initialize(dimension);
+    }
 
     template<>
     void Layer<Tensor1>::Initialize()
@@ -54,15 +51,16 @@ namespace FengML
     }
 
     template<>
-    Layer<Tensor1>::Layer(size_t dimension): dim(dimension)
-    {
-        Initialize(dimension);
-    }
-
-    template<>
     size_t Layer<Tensor1>::Length()
     {
         return dim;
+    }
+
+    template<>
+    Layer<Tensor3>::Layer(typename Tensor3::DT dimension) :
+        dim(dimension)
+    {
+        Initialize(dimension);
     }
 
     template<>
@@ -92,13 +90,6 @@ namespace FengML
         {
             item.Resize(height, width);
         }
-    }
-
-    template<>
-    Layer<Tensor3>::Layer(typename Tensor3::DT dimension):
-        dim(dimension)
-    {
-        Initialize(dimension);
     }
 
     template<>

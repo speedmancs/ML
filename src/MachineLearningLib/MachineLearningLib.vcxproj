@@ -173,6 +173,7 @@
     <ClCompile Include="Data\DataSet.cpp" />
     <ClCompile Include="Data\MnistDataSet.cpp" />
     <ClCompile Include="Data\SeqDataSet.cpp" />
+    <ClCompile Include="Layer\LayerBase.cpp" />
     <ClCompile Include="Model\LRModel.cpp" />
     <ClCompile Include="Model\Model.cpp" />
     <ClCompile Include="Model\RNNModel.cpp" />

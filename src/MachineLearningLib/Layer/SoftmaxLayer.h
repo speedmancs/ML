@@ -21,17 +21,19 @@ namespace FengML
 
     void SoftmaxLayer::forward()
     {
-        assert(previousLayer != nullptr);
-        auto& sd = previousLayer->GetData1D();
-        this->data = sd;
-        this->data.SoftMax();
+        PrintDim();
+        //assert(previousLayer != nullptr);
+        //auto& sd = previousLayer->GetData1D();
+        //this->data = sd;
+        //this->data.SoftMax();
     }
 
     void SoftmaxLayer::backward()
     {
-        assert(previousLayer != nullptr);
-        auto& g = previousLayer->GetGradient1D();
-        g = this->data;
-        g.Sub(target);
+        PrintDim();
+        //assert(previousLayer != nullptr);
+        //auto& g = previousLayer->GetGradient1D();
+        //g = this->data;
+        //g.Sub(target);
     }
 }

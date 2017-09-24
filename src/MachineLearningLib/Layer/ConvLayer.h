@@ -43,11 +43,13 @@ namespace FengML
 
     void ConvLayer::forward()
     {
+        PrintDim();
         // to do
     }
 
     void ConvLayer::backward()
     {
+        PrintDim();
         // to do
     }
 }

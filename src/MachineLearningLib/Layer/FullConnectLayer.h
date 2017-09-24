@@ -29,11 +29,13 @@ namespace FengML
 
     void FullConnectLayer::forward()
     {
-
+        PrintDim();
+        // to do
     }
 
     void FullConnectLayer::backward()
     {
-
+        PrintDim();
+        // to do
     }
 }

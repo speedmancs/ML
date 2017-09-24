@@ -1,6 +1,6 @@
 #pragma once
 #include "Layer.h"
-#include "FlattenLayer.h"
+#include <iostream>
 namespace FengML
 {
     class Tensor1DLayer : public Layer<Tensor1>
@@ -28,5 +28,12 @@ namespace FengML
         {
             return gradient;
         }
+
+        virtual void PrintDim();
     };
+
+    void Tensor1DLayer::PrintDim()
+    {
+        std::cout << "dim:" << dim << std::endl;
+    }
 }
