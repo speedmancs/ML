@@ -25,7 +25,7 @@ namespace FengML
             return nextLayer;
         }
 
-        virtual std::shared_ptr<FlattenLayer> Flatten();
+        virtual LayerBase& Flatten();
 
         virtual typename Tensor3::DT Dim3()
         {
@@ -47,13 +47,13 @@ namespace FengML
         std::shared_ptr<FlattenLayer> flattenLayer;
     };
 
-    std::shared_ptr<FlattenLayer> Tensor3DLayer::Flatten()
+    LayerBase& Tensor3DLayer::Flatten()
     {
         auto flatten = std::shared_ptr<FlattenLayer>(new FlattenLayer());
         this->flattenLayer = flatten;
         flatten->SetSourceLayer(this);
         flatten->Initialize();
-        return flatten;
+        return *flatten;
     }
 
     void Tensor3DLayer::PrintDim()

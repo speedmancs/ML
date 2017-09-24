@@ -49,14 +49,14 @@ void TestLayer()
     auto input = InLayer(new InputLayer(Dim3Type(1, 28, 28)));
     auto softmaxLayer = SmLayer(new SoftmaxLayer());
 
-    input->Add(Layer3(new ConvLayer(6, 5)))
+    (*input).Add(Layer3(new ConvLayer(6, 5)))
         .Add(Layer3(new ReLu3()))
         .Add(Layer3(new PoolingLayer(2)))
         .Add(Layer3(new ConvLayer(16, 5)))
         .Add(Layer3(new ReLu3()))
         .Add(Layer3(new PoolingLayer(2)))
         .Flatten()
-        ->Add(Layer1(new FullConnectLayer(50)))
+        .Add(Layer1(new FullConnectLayer(50)))
         .Add(Layer1(new ReLu1()))
         .Add(Layer1(new FullConnectLayer(10)))
         .Add(Layer1(softmaxLayer));

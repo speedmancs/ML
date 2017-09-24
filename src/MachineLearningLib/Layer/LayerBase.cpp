@@ -1,9 +1,10 @@
 #include "LayerBase.h"
+#include <iostream>
 namespace FengML
-{
-    typename Tensor1::DataType LayerBase::dummy1d;
-    typename Tensor3::DataType LayerBase::dummy3d;
-
+{    
+    static LayerBase dummyLayer;
+    static typename Tensor1::DataType dummy1d;
+    static typename Tensor3::DataType dummy3d;
     LayerBase& LayerBase::Add(std::shared_ptr<LayerBase> _nextLayer)
     {
         nextLayer = _nextLayer;
@@ -48,13 +49,18 @@ namespace FengML
         return previousLayer;
     }
 
-    std::shared_ptr<FlattenLayer> LayerBase::Flatten()
+    LayerBase& LayerBase::Flatten()
     {
-        return std::shared_ptr<FlattenLayer>();
+        return dummyLayer;
     }
 
     std::shared_ptr<LayerBase> LayerBase::Next()
     {
         return nextLayer;
+    }
+
+    void LayerBase::PrintDim()
+    {
+        std::cout << "dummpy layer, no dimension" << std::endl;
     }
 }

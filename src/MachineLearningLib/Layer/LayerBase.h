@@ -5,7 +5,6 @@
 #include "..\Common\Matrix.h"
 namespace FengML
 {
-    class FlattenLayer;
     class Tensor1
     {
     public:
@@ -35,20 +34,18 @@ namespace FengML
             PrintDim();
         }
         virtual LayerBase* Previous();
-        virtual std::shared_ptr<FlattenLayer> Flatten();
+        virtual LayerBase& Flatten();
         virtual std::shared_ptr<LayerBase> Next();
         virtual void Initialize() {}
         LayerBase& Add(std::shared_ptr<LayerBase> _nextLayer);
         virtual size_t Dim1();
         virtual Dim3Type Dim3();
-        virtual void PrintDim() = 0;
+        virtual void PrintDim();
         virtual typename Tensor1::DataType& GetData1D();
         virtual typename Tensor1::DataType& GetGradient1D();
         virtual typename Tensor3::DataType& GetData3D();
         virtual typename Tensor3::DataType& GetGradient3D();
     protected:
-        static typename Tensor1::DataType dummy1d;
-        static typename Tensor3::DataType dummy3d;
         LayerBase* previousLayer;
         std::shared_ptr<LayerBase> nextLayer;
     };
