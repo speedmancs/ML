@@ -147,6 +147,17 @@
     <ClInclude Include="Data\DataSet.h" />
     <ClInclude Include="Data\MnistDataSet.h" />
     <ClInclude Include="Data\SeqDataSet.h" />
+    <ClInclude Include="Layer\ActivationLayer.h" />
+    <ClInclude Include="Layer\ConvLayer.h" />
+    <ClInclude Include="Layer\FlattenLayer.h" />
+    <ClInclude Include="Layer\FullConnectLayer.h" />
+    <ClInclude Include="Layer\InputLayer.h" />
+    <ClInclude Include="Layer\Layer.h" />
+    <ClInclude Include="Layer\LayerBase.h" />
+    <ClInclude Include="Layer\PoolingLayer.h" />
+    <ClInclude Include="Layer\SoftmaxLayer.h" />
+    <ClInclude Include="Layer\Tensor1DLayer.h" />
+    <ClInclude Include="Layer\Tensor3DLayer.h" />
     <ClInclude Include="Model\LRModel.h" />
     <ClInclude Include="Model\Model.h" />
     <ClInclude Include="Model\RNNModel.h" />

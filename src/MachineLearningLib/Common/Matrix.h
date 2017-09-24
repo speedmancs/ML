@@ -63,6 +63,11 @@ namespace FengML
             }
         }
 
+        T* Data()
+        {
+            return m_data;
+        }
+
         size_t Row() const
         {
             return row;
@@ -138,7 +143,6 @@ namespace FengML
     template<class T>
     Matrix<T>::Matrix(const std::vector<std::vector<T>>& _data)
     {
-        m_Len = 0;
         m_data = nullptr;
         row = col = 0;
         if (_data.size() > 0 && _data[0].size() > 0)
@@ -146,7 +150,7 @@ namespace FengML
             row = _data.size();
             col = _data[0].size();
             m_data = new T[row * col];
-            int start = 0;
+            size_t start = 0;
             for each (auto& vec in _data)
             {
                 std::copy(vec.begin(), vec.end(), m_data + start);

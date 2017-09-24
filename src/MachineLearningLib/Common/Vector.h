@@ -436,7 +436,7 @@ namespace FengML
             sum += m_data[i];
         }
 
-        sum = 1.0 / sum;
+        sum = 1.0f / sum;
 
         for (size_t i = 0; i < m_Len; i++)
         {
